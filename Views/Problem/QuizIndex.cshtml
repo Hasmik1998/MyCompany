@@ -1,0 +1,197 @@
+﻿@model List<MyCompany.Data.Quiz>
+@{
+    ViewData["Title"] = "Quiz Form";
+    ViewData["Decsription"] = "Choose the level and go";
+}
+@{
+    ViewData["Title"] = "Quiz";
+    ViewData["Decsription"] = "Choose the level and go";
+}
+<div class="row">
+    <div class="col-md-8 ml-auto mr-auto text-center">
+        <ul class="nav nav-pills nav-pills-primary" style="padding-left: 185px;margin-top: 11px;">
+            <li class="nav-item">
+                <a class="nav-link active show" href="#pill1" data-toggle="tab" style="font-size: 20px;line-height: 40px;font-weight: 450; min-width: 130px;">Main</a>
+            </li>
+            <li class="nav-item" style="margin-left: 47px;">
+                <a class="nav-link" href="#pill2" data-toggle="tab" style="font-size: 20px;line-height: 40px;font-weight: 450; min-width: 130px;"> Easy</a>
+            </li>
+            <li class="nav-item" style="margin-left: 47px;">
+                <a class="nav-link" href="#pill3" data-toggle="tab" style="font-size: 20px; line-height: 40px;font-weight: 450;min-width: 130px;">Medium</a>
+            </li>
+            <li class="nav-item" style="margin-left: 47px;">
+                <a class="nav-link" href="#pill4" data-toggle="tab" style="font-size: 20px;line-height: 40px;font-weight: 450;min-width: 130px;">Hard</a>
+            </li>
+        </ul>
+        <div class="tab-content tab-space">
+            <div class="tab-pane active" id="pill1">
+                <div class=" section-text">
+                    <div class="row">
+                        <div class="col-md-10 ml-auto mr-auto">
+                            <div class="col-md-10 ml-auto mr-auto">
+                                <h3 class="title" style="text-align:center">Description</h3>
+                                <p>
+                                    In this page you can find quizzes created by the trainers.
+                                </p>
+                                @if (User.Identity.IsAuthenticated && User.IsInRole("User"))
+                                {
+                                    <p>
+                                        For Trainners you can use https://www.quiz-maker.com/ to create tests or another web page you like.
+                                        For adding quiz you should click Add button write your name, level of test and put the link of test
+                                    </p>
+                                }
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tab-pane" id="pill2">
+                <div class="col-md-10 ml-auto mr-auto">
+                    <h3 class="title">Easy level quizzes</h3>
+                    <br />
+                    @for (int i = 0; i < Model.Count; i++)
+                    {
+                        var item = Model[i];
+                        @if (item.Level == MyCompany.Utilities.Difficulty.Easy)
+                        {
+                            var a = i + 1;
+                            <div class="table-responsive">
+                                <table class="table table-shopping">
+                                    <thead>
+                                        <tr>
+                                            <th class="text-center"></th>
+                                            <th>Click and go</th>
+                                            @if (User.Identity.IsAuthenticated && (User.IsInRole("Admin") || User.IsInRole("User")))
+                                            {
+                                                <th>Delete</th>
+                                            }
+
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td class="td-name">
+                                                <p style="font-size: 27px;">Test @a</p>
+                                            </td>
+
+                                            <td class="td-actions">
+                                                <a href="@item.QuizLink" class="btn btn-round btn-primary " target="_blank" style="width: 81px;height: 37px;text-align: center;">Start</a>
+                                            </td>
+                                            @if (User.Identity.IsAuthenticated && (User.IsInRole("Admin") || User.IsInRole("User")))
+                                            {
+                                                <td>
+                                                    <a asp-action="DeleteQuiz" asp-controller="Problem" asp-route-Id="@item.Id" class="btn btn-primary btn-round" type="button" rel="tooltip" data-placement="left" title="If you click here the quiz will deleted">Delete</a>
+                                                </td>
+                                            }
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        }
+                    }
+                </div>
+            </div>
+
+            <div class="tab-pane" id="pill3">
+                <div class="col-md-10 ml-auto mr-auto">
+                    <h3 class="title">Medium level quizzes</h3>
+                    <br />
+                    @for (int i = 0; i < Model.Count; i++)
+                    {
+                        var item = Model[i];
+                        @if (item.Level == MyCompany.Utilities.Difficulty.Medium)
+                        {
+                            var a = i + 1;
+                            <div class="table-responsive">
+                                <table class="table table-shopping">
+                                    <thead>
+                                        <tr>
+                                            <th class="text-center"></th>
+                                            <th>Click and go</th>
+                                            @if (User.Identity.IsAuthenticated && (User.IsInRole("Admin") || User.IsInRole("User")))
+                                            {
+                                                <th>Delete</th>
+                                            }
+
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td class="td-name">
+                                                <p style="font-size: 27px;">Test @a</p>
+                                            </td>
+
+                                            <td class="td-actions">
+                                                <a href="@item.QuizLink" class="btn btn-round btn-primary " target="_blank" style="width: 81px;height: 37px;text-align: center;">Start</a>
+                                            </td>
+                                            @if (User.Identity.IsAuthenticated && (User.IsInRole("Admin") || User.IsInRole("User")))
+                                            {
+                                                <td>
+                                                    <a asp-action="DeleteQuiz" asp-controller="Problem" asp-route-Id="@item.Id" class="btn btn-primary btn-round" type="button" rel="tooltip" data-placement="left" title="If you click here the quiz will deleted">Delete</a>
+                                                </td>
+                                            }
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        }
+                    }
+                </div>
+
+
+            </div>
+
+            <div class="tab-pane" id="pill4">
+                <div class="col-md-10 ml-auto mr-auto">
+                    <h3 class="title">
+                        Hard level quizzes
+                    </h3>
+                    <br />
+                    @for (int i = 0; i < Model.Count; i++)
+                    {
+                        var item = Model[i];
+                        @if (item.Level == MyCompany.Utilities.Difficulty.Hard)
+                        {
+                            var a = i + 1;
+                            <div class="table-responsive">
+                                <table class="table table-shopping">
+                                    <thead>
+                                        <tr>
+                                            <th class="text-center"></th>
+                                            <th>Click and go</th>
+                                            @if (User.Identity.IsAuthenticated && (User.IsInRole("Admin") || User.IsInRole("User")))
+                                            {
+                                                <th>Delete</th>
+                                            }
+
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td class="td-name">
+                                                <p style="font-size: 27px;">Test @a</p>
+                                            </td>
+
+                                            <td class="td-actions">
+                                                <a href="@item.QuizLink" class="btn btn-round btn-primary " target="_blank" style="width: 81px;height: 37px;text-align: center;">Start</a>
+                                            </td>
+                                            @if (User.Identity.IsAuthenticated && (User.IsInRole("Admin") || User.IsInRole("User")))
+                                            {
+                                                <td>
+                                                    <a asp-action="DeleteQuiz" asp-controller="Problem" asp-route-Id="@item.Id" class="btn btn-primary btn-round" type="button" rel="tooltip" data-placement="left" title="If you click here the quiz will deleted">Delete</a>
+                                                </td>
+                                            }
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        }
+                    }
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>

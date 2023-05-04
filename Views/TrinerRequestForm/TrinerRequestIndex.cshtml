@@ -1,0 +1,82 @@
+﻿@model List<MyCompany.Data.TrinerRequest>
+@{
+    ViewData["Title"] = "Trainer Requests";
+    ViewData["Decsription"] = "If you want to add a Trainer Request , please click on the 'Add a Trainer Request' Button";
+}
+<div class="container">
+    <div class="section">
+        <div class="row">
+            <div class="col-md-12">
+                @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+                {
+                    <div class="row">
+                        @for (int i = 0; i < Model.Count; i++)
+                        {
+                            var item = Model[i];
+                            if (!item.Accept)
+                            {
+                                <div class="col-md-4">
+                                    <div class="card card-blog">
+                                        <div class="card-header card-header-image">
+                                            <a asp-action="Profile" asp-controller="Account" asp-route-UserName="@item.Email">
+                                                <img class="img img-raised" src="@item.Avatar">
+                                            </a>
+                                        </div>
+                                        <div class="card-body">
+                                            <h6 class="category text-info">@item.Name @item.SurName</h6>
+                                            <p class="card-description">
+                                                @item.About
+                                                <h5>@item.MyRequest</h5>
+                                                @item.Email
+                                            </p>
+                                        </div>
+                                        @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+                                        {
+                                            <a asp-action="AcceptRequest" asp-controller="TrinerRequestForm" asp-route-Id="@item.Id" class="book-room-btn btn palatin-btn">Accept</a>
+                                            <a asp-action="DeleteRequest" asp-controller="TrinerRequestForm" asp-route-Id="@item.Id" class="book-room-btn btn palatin-btn">Delete</a>
+                                        }
+                                    </div>
+                                </div>
+                            }
+                        }
+                    </div>
+                }
+                <h2 class="title text-center">Similar Stories</h2>
+                <br>
+
+                <div class="row">
+                    @for (int i = 0; i < Model.Count; i++)
+                    {
+                        var item = Model[i];
+                        if (item.Accept && !item.Done)
+                        {
+                            <div class="col-md-4">
+                                <div class="card card-blog">
+                                    <div class="card-header card-header-image">
+                                        <a href="#pablo">
+                                            <img class="img img-raised" src="@item.Avatar">
+                                        </a>
+                                    </div>
+                                    <div class="card-body">
+                                        <h6 class="category text-info">@item.Name @item.SurName</h6>
+                                        <p class="card-description">
+                                            @item.About
+                                            <h5>@item.MyRequest</h5>
+                                            @item.Email
+                                        </p>
+                                    </div>
+                                    @if ((User.Identity.IsAuthenticated && User.IsInRole("Admin")) || (User.Identity.IsAuthenticated && User.Identity.Name.Equals(item.Email)))
+                                    {
+                                        <a asp-action="MarkRequestAsDone" asp-controller="TrinerRequestForm" asp-route-Id="@item.Id" class="book-room-btn btn palatin-btn">Done</a>
+                                        <a asp-action="EditRequest" asp-controller="TrinerRequestForm" asp-route-Id="@item.Id" class="book-room-btn btn palatin-btn">Edit</a>
+                                        <a asp-action="DeleteRequest" asp-controller="TrinerRequestForm" asp-route-Id="@item.Id" class="book-room-btn btn palatin-btn">Delete</a>
+                                    }
+                                </div>
+                            </div>
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

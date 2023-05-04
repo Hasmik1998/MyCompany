@@ -1,0 +1,241 @@
+﻿@model List<MyCompany.Data.Problem>
+@{ 
+    ViewData["Title"] = "Exercises ";
+    ViewData["Decsription"] = "Choose the leval and go";
+}
+<div class="row">
+    <div class="col-md-8 ml-auto mr-auto text-center">
+        <ul class="nav nav-pills nav-pills-primary" style="padding-left: 185px; margin-top: 11px;">
+            <li class="nav-item">
+                <a class="nav-link active show" href="#pill1" data-toggle="tab" style="font-size: 20px;line-height: 40px;font-weight: 450; min-width: 130px;">Main</a>
+            </li>
+            <li class="nav-item" style="margin-left: 47px;">
+                <a class="nav-link" href="#pill2" data-toggle="tab" style="font-size: 20px;line-height: 40px;font-weight: 450; min-width: 130px;">Easy</a>
+            </li>
+            <li class="nav-item" style="margin-left: 47px;">
+                <a class="nav-link" href="#pill3" data-toggle="tab" style="font-size: 20px; line-height: 40px;font-weight: 450;min-width: 130px;">Medium</a>
+            </li>
+            <li class="nav-item" style="margin-left: 47px;">
+                <a class="nav-link" href="#pill4" data-toggle="tab" style="font-size: 20px;line-height: 40px;font-weight: 450;min-width: 130px;">Hard</a>
+            </li>
+        </ul>
+        <div class="tab-content tab-space">
+            <div class="tab-pane active" id="pill1">
+                <div class=" section-text">
+                    <div class="row">
+                        <div class="col-md-10 ml-auto mr-auto">
+                            <div class="col-md-10 ml-auto mr-auto">
+                                <h3 class="title" style="text-align:center">Movement</h3>
+                                <p>
+                                    In competitive games, the colors are allocated by the organizers; in informal games, the colors are usually decided randomly, for example by coin toss, or by one player's concealing a white and black pawn in either hand and having the opponent choose. White moves first, after which players alternate turns, moving one piece per turn (except for castling, when two pieces are moved).
+                                    A piece is moved to either an unoccupied square or one occupied by an opponent's piece, which is captured and removed from play. With the sole exception of en passant, all pieces capture by moving to the square that the opponent's piece occupies.
+                                </p>
+                                <p>
+                                    Moving is compulsory; it is illegal to skip a turn, even when having to move is detrimental. A player may not make any move that would put or leave the player's own king in check. If the player to move has no legal move, the game is over; the result is either checkmate (a loss for the player with no legal move) if the king is in check, or stalemate (a draw) if the king is not.
+                                </p>
+                                <p>
+                                    Looking across the bottom row of white pieces we see a rook (sometimes called a castle), a knight, a bishop, a queen, a king, another bishop, another knight, and another rook. The next row of white pieces consists of eight pawns.
+                                    Each different type of piece moves in a specific way, as described in detail in the rest of this tutorial.
+                                </p>
+                                <p>
+                                    Each piece has its own way of moving. In the diagrams, the dots mark the squares to which the piece can move if there are no intervening piece(s) of either color (except the knight, which leaps over any intervening pieces).
+                                </p>
+                            </div>
+                            <div class="section col-md-10 ml-auto mr-auto">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <img src="~/MyImages/kingm.PNG" />
+                                    </div>
+                                    <div class="col-md-4">
+                                        <img src="~/MyImages/queenm.PNG" />
+                                    </div>
+                                    <div class="col-md-4">
+                                        <img src="~/MyImages/rookm.PNG" />
+                                    </div>
+                                    <div style="text-align:left">
+                                        <p>
+                                            <strong>The king</strong> moves one square in any direction. <strong>The king</strong> also has a special move called castling that involves also moving a rook.
+                                        </p>
+                                        <p>
+                                            <strong>The queen</strong> combines the power of a rook and bishop and can move any number of squares along a rank, file, or diagonal, but cannot leap over other pieces.
+                                        </p>
+                                        <p>
+                                            <strong>A rook</strong> can move any number of squares along a rank or file, but cannot leap over other pieces. Along with the king,a<strong> rook</strong> is involved during the king's castling move.
+                                        </p>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <img src="~/MyImages/knightm.PNG" />
+                                    </div>
+                                    <div class="col-md-4">
+                                        <img src="~/MyImages/brishopm.PNG" />
+                                    </div>
+                                    <div class="col-md-4">
+                                        <img src="~/MyImages/pawnm.PNG" />
+                                    </div>
+                                    <div style="text-align:left">
+                                        <p>
+                                            <strong>A knight</strong> moves to any of the closest squares that are not on the same rank, file, or diagonal. (Thus the move forms an "L"-shape:  two squares vertically and one square horizontally, or two squares horizontally and one square vertically.) <strong>The knight</strong> is the only piece that can leap over other pieces.
+                                        </p>
+                                        <p>
+                                            <strong>A bishop</strong> can move any number of squares diagonally, but cannot leap over other pieces.
+                                        </p>
+                                        <p>
+                                            <strong>A pawn</strong> can move forward to the unoccupied square immediately in front of it on the same file, or on its first move it can advance two squares along the same file, provided both squares are unoccupied (black dots in the diagram); or the pawn can capture an opponent's piece on a square diagonally in front of it on an adjacent file, by moving to that square (black "x"s).
+                                            <strong>A pawn</strong> has two special moves: the en passant capture and promotion.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div><br />
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tab-pane" id="pill2">
+                <div class="col-md-10 ml-auto mr-auto">
+                    <h3 class="title">Easy Exercises</h3>
+                    <br />
+                    @for (int i = 0; i < Model.Count; i++)
+                    {
+                        var item = Model[i];
+                        @if (item.Level == MyCompany.Utilities.Difficulty.Easy)
+                        {
+                            <div class="table-responsive">
+                                <table class="table table-shopping">
+                                    <thead>
+                                        <tr>
+                                            <th class="text-center">Photo</th>
+                                            <th>Description</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                <div class="img-exmpl">
+                                                    <img class="img img-raised" src="@item.ProblemImage">
+                                                </div>
+                                            </td>
+                                            <td class="td-name">
+                                                <p>@item.Description</p>
+                                            </td>
+
+                                            <td class="td-actions">
+                                                <button class="btn btn-primary btn-round" type="button" rel="tooltip" data-placement="left" title="@item.Solution" class="btn btn-link">
+                                                    Solution
+                                                </button>
+                                                @if (User.Identity.IsAuthenticated && (User.IsInRole("Admin") || User.IsInRole("User")))
+                                                {
+                                                    <a asp-action="DeleteProblem" asp-controller="Problem" asp-route-Id="@item.Id" class="btn btn-primary btn-round" type="button" rel="tooltip" data-placement="left" title="Delete" class="btn btn-link">Delete</a>
+                                                }
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        }
+                    }
+                </div>
+            </div>
+
+            <div class="tab-pane" id="pill3">
+                <div class="col-md-10 ml-auto mr-auto">
+                    <h3 class="title">Medum Exercises</h3>
+                    <br />
+                    @for (int i = 0; i < Model.Count; i++)
+                    {
+                        var item = Model[i];
+                        @if (item.Level == MyCompany.Utilities.Difficulty.Medium)
+                        {
+                            <div class="table-responsive">
+                                <table class="table table-shopping">
+                                    <thead>
+                                        <tr>
+                                            <th class="text-center">Photo</th>
+                                            <th>Description</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                <div class="img-exmpl">
+                                                    <img class="img img-raised" src="@item.ProblemImage">
+                                                </div>
+                                            </td>
+                                            <td class="td-name">
+                                                <p>@item.Description</p>
+
+                                            </td>
+
+                                            <td class="td-actions">
+                                                <button class="btn btn-primary btn-round" type="button" rel="tooltip" data-placement="left" title="@item.Solution" class="btn btn-link">
+                                                    Stution
+                                                </button>
+                                                @if (User.Identity.IsAuthenticated && (User.IsInRole("Admin") || User.IsInRole("User")))
+                                                {
+                                                    <a asp-action="DeleteProblem" asp-controller="Problem" asp-route-Id="@item.Id" class="btn btn-primary btn-round" type="button" rel="tooltip" data-placement="left" title="Delete" class="btn btn-link">Delete</a>
+                                                }
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        }
+                    }
+                </div>
+
+
+            </div>
+            <div class="tab-pane" id="pill4">
+                <div class="col-md-10 ml-auto mr-auto">
+                    <h3 class="title">Hard Exercises</h3>
+                    <br />
+                    @for (int i = 0; i < Model.Count; i++)
+                    {
+                        var item = Model[i];
+                        @if (item.Level == MyCompany.Utilities.Difficulty.Hard)
+                        {
+                            <div class="table-responsive">
+                                <table class="table table-shopping">
+                                    <thead>
+                                        <tr>
+                                            <th class="text-center">Photo</th>
+                                            <th>Description</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                <div class="img-exmpl">
+                                                    <img class="img img-raised" src="@item.ProblemImage">
+                                                </div>
+                                            </td>
+                                            <td class="td-name">
+                                                <p>@item.Description</p>
+
+                                            </td>
+
+                                            <td class="td-actions">
+                                                <button class="btn btn-primary btn-round" type="button" rel="tooltip" data-placement="left" title="@item.Solution" class="btn btn-link">
+                                                    Stution
+                                                </button>
+                                                @if (User.Identity.IsAuthenticated && (User.IsInRole("Admin") || User.IsInRole("User")))
+                                                {
+                                                    <a asp-action="DeleteProblem" asp-controller="Problem" asp-route-Id="@item.Id" class="btn btn-primary btn-round" type="button" rel="tooltip" data-placement="left" title="Delete" class="btn btn-link">Delete</a>
+                                                }
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        }
+                    }
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>

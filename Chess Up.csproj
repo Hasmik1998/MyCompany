@@ -1,0 +1,54 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+    <UserSecretsId>aspnet-MyCompany-A7FE8030-5423-47DE-A8BC-58C2B0A5A92B</UserSecretsId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="wwwroot\Images\**" />
+    <Content Remove="wwwroot\Images\**" />
+    <EmbeddedResource Remove="wwwroot\Images\**" />
+    <None Remove="wwwroot\Images\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Views\Shared\chesss.jpg" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Views\Shared\chesss.jpg" />
+    <Content Include="wwwroot\Images\01-21-1967_Artashes_Minasyan.jpg" />
+    <Content Include="wwwroot\Images\avatar.diplom.jpg" />
+    <Content Include="wwwroot\Images\chesss.jpg" />
+    <Content Include="wwwroot\Images\Garry-Kasparov-2.jpg" />
+    <Content Include="wwwroot\Images\Lilit Mkrtchyan.jpg" />
+    <Content Include="wwwroot\Images\Mariam-copy.jpg" />
+    <Content Include="wwwroot\Images\thanks.jpg" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <PackageReference Include="HtmlAgilityPack" Version="1.11.46" />
+    <PackageReference Include="Microsoft.AspNet.SignalR.Client" Version="2.4.1" />
+    <PackageReference Include="Microsoft.AspNet.SignalR.Core" Version="2.4.1" />
+    <PackageReference Include="Microsoft.AspNet.SignalR.SystemWeb" Version="2.4.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="3.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="3.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.SignalR.Core" Version="1.1.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.0.1" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.0.1" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="3.0.0" />
+    <PackageReference Include="Microsoft.Owin.Host.SystemWeb" Version="4.1.1" />
+    <PackageReference Include="Microsoft.Owin.Security" Version="4.1.1" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.0.0" />
+    <PackageReference Include="Owin" Version="1.0.0" />
+    <PackageReference Include="SqlTableDependency" Version="8.5.8" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="5.6.3" />
+    <PackageReference Include="System.Configuration.ConfigurationManager" Version="4.7.0" />
+    <PackageReference Include="System.Drawing.Common" Version="4.7.0" />
+    <PackageReference Include="System.Speech" Version="5.0.0" />
+  </ItemGroup>
+
+</Project>

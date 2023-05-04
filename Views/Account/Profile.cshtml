@@ -1,0 +1,49 @@
+﻿@model MyCompany.Data.RegistrationRequest
+@{
+    ViewBag.Title = "This is your personal page";
+}
+
+<div style="align-content:center">
+
+    <div class="row" style="align-content:center">
+        <div class="col-md-3 ml-auto mr-auto">
+            <div class="profile">
+                @if (!ViewBag.Found)
+                {
+                    <h4>User not found</h4>
+                }
+                else
+                {
+                    <div>
+                        <div class="avatar">
+                            <img src="@Model.Image" alt="Your Image" class="img-raised rounded-circle" style="max-width: 50%;">
+                            <h3 class="title">@string.Join(" ", Model.Name, Model.SurName)</h3>
+                        </div>
+                        <div class="name">
+                            <p> Email : @Model.Email </p>
+
+                            <p>Phone : @Model.Phone </p>
+
+                            <br />
+                            <br />
+                            @if (User.IsInRole("User"))
+                            {
+                                <h6>Trainer</h6>
+                            }
+                            else
+                            {
+                                <h6>Chess Player</h6>
+                            }
+
+                            <p>@Model.About</p>
+                            @if (User.Identity.IsAuthenticated)
+                            {
+                                <a asp-action="EditProfile" asp-controller="Account" asp-route-Id="@Model.Id" class="btn btn-primary btn-round" type="button" rel="tooltip" data-placement="left" title="Edit" class="btn btn-link">Edit</a>
+                            }
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>

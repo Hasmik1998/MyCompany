@@ -1,0 +1,52 @@
+﻿@model List<Chess_Up.Data.RatingsData>
+
+@{
+    ViewData["Title"] = "Rating";
+    ViewData["Decsription1"] = "Here you can find all ratings.";
+    ViewData["Decsription2"] = "We believe in good moves.";
+}
+
+<div class="section section-text">
+    <div class="row">
+        <div class="col-md-8 ml-auto mr-auto">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Full Name</th>
+                        <th>Trainer Name</th>
+                        <th>School Name</th>
+                        <th>Rating 2022</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                    <tr>
+                        <td>@item.Full_Name</td>
+                        <td>@item.Trainer</td>
+                        <td>@item.School_Name</td>
+                        <td>@item.rating_standard_2022</td>
+                    </tr>
+                    }
+                </tbody>
+            </table>
+
+            <div class="pagination">
+                @if (Model.Count > 0)
+                {
+                    <a class="btn btn-primary @((ViewBag.PageNumber == 1) ? "disabled" : "")"
+                       href="@Url.Action("Retings", new { pageNumber = ViewBag.PageNumber - 1 })">Previous</a>
+
+                    @for (int i = 1; i <= Math.Ceiling((double)Model.Count / 10); i++)
+                    {
+                        <a class="btn btn-primary @((ViewBag.PageNumber == i) ? "active" : "")"
+                           href="@Url.Action("Retings", new { pageNumber = i })">@i</a>
+                    }
+
+                    <a class="btn btn-primary @((ViewBag.PageNumber == Math.Ceiling((double)Model.Count / 10)) ? "disabled" : "")"
+                       href="@Url.Action("Retings", new { pageNumber = ViewBag.PageNumber + 1 })">Next</a>
+                }
+            </div>
+        </div>
+    </div>
+</div>

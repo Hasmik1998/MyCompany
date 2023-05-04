@@ -1,0 +1,62 @@
+﻿@model UsersModel
+@{
+    ViewBag.Title = "Users";
+    ViewData["Decsription1"] = "There is all users with whom you can contact...";
+    ViewData["Decsription2"] = "Click avatar";
+}
+
+<div class="row">
+
+    <div class="col-lg-4 col-md-6 col-sm-8 ml-auto mr-auto">
+        @using (Html.BeginForm("Search", "Account", FormMethod.Get, new { enctype = "multipart/form-data" }))
+        {
+            @if (string.IsNullOrEmpty(Model.SearchText))
+            {
+                @Html.TextBoxFor(model => Model.SearchText, new { @class = "form-control", @placeholder = "Search user", @Style = "margin-top:10%" })
+                @Html.ValidationMessageFor(model => model.SearchText)
+            }
+            else
+            {
+                @Html.TextBoxFor(model => Model.SearchText, new { @class = "form-control", @placeholder = Model.SearchText })
+                @Html.ValidationMessageFor(model => model.SearchText)
+            }
+            <button type="submit" class="btn btn-primary btn-round" style="margin-top: -70px; margin-left: 102%">Search</button>
+        }
+
+        @for (int i = 0; i < Model.Users.Count; ++i)
+        {
+            var item = Model.Users[i];
+            var userType = "";
+            if (item.UserType == MyCompany.Utilities.UserType.TrainnerUser)
+            {
+                userType = "Trainer";
+            }
+            else
+            {
+                userType = "Chess Player";
+            }
+            <div class="media">
+                <div class="card card-profile">
+                    <div class="card-title">
+                        <a asp-action="Profile" asp-controller="Account" asp-route-UserName="@item.Email" class="float-left">
+                            <div class="avatar">
+                                <img class="media-object" src="@item.Image" alt="...">
+                            </div>
+                        </a>
+                        <a asp-action="Profile" asp-controller="Account" asp-route-UserName="@item.Email">
+                            <h4>
+                                @string.Join(" ", @item.Name, @item.SurName)
+                            </h4>
+                        </a>
+                        <p class="card-description">
+                            @item.Email
+                        </p>
+                        
+                        <p>@userType</p>
+                        <a asp-action="CreateChatRoom" asp-controller="Messenger" asp-route-Id="@item.Id" class="btn btn-primary btn-round" type="button" rel="tooltip" data-placement="left" title="Connect via chat" class="btn btn-link">Connect via chat</a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>

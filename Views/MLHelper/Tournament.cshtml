@@ -1,0 +1,28 @@
+﻿@model List<string>
+
+@{
+    ViewData["Title"] = "Tournament";
+    ViewData["Decsription1"] = "Here you can find all retings.";
+    ViewData["Decsription2"] = "We believe in good moves.";
+}
+<div class="section section-text">
+    <div class="row">
+        <div class="col-md-8 ml-auto mr-auto">
+            <table class="table">
+                <thead>
+                            <tr>
+                                <th>Tournament Name</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var tourName in Model)
+                            {
+                                <tr>
+                                    <td>@tourName</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,46 @@
+﻿@model List<MyCompany.Models.ChatRoomsModel>
+@{
+    ViewBag.Title = "Messages";
+}
+
+<div class="card card-plain" style="align-content:center;">
+    <div class="card-body">
+        <br />
+        <div class="table-responsive">
+            <table class="table table-shopping">
+                <thead>
+                    <tr>
+                        <th class="text-center"></th>
+                        @*<th>Information</th>*@
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @for (int i = 0; i < Model.Count; i++)
+                    {
+                        var item = Model[i];
+                        <tr>
+                            <td>
+                                <div class="img-container">
+                                    @*<img src="~/Images/avatar.diplom.jpg">*@
+                                    <img src="@item.Image" class="img-raised rounded img-fluid">
+                                </div>
+                            </td>
+                            <td class="td-name">
+                                <a asp-action="Profile" asp-controller="Account" asp-route-UserName="@item.ToUserUserName">@item.ToUserUserName</a>
+                                <br />
+                                <small>@item.ChatRoomData</small>
+                            </td>
+                            <td>
+                                <a asp-controller="Messenger" asp-action="ChatRoom" asp-route-Id="@item.ChatRoomId" class="btn btn-round btn-info"> Go to Chat</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+
+
+        </div>
+    </div>
+</div>

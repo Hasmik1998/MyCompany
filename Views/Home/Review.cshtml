@@ -1,0 +1,70 @@
+﻿@model List<MyCompany.Data.Review>
+@{ 
+    ViewData["Title"] = "Reviews";
+
+    ViewData["Decsription"] = "If life is a game be the winner";
+}
+<div class="section section-text">
+    <div class="section section-blog-info">
+        <div class="row">
+            <div class="col-md-8 ml-auto mr-auto">
+                <div class="row">
+                    <div class="col-md-6"><h4 style="padding-top: 8px;">Chess-up</h4></div>
+                    <div class="col-md-6">
+                        <a href="https://www.instagram.com/BetterSolutions.petrosyan/" class="btn btn-instagram btn-round float-right" style="background-color: #e91e63;border-color: #e91e63;}" target="_blank">
+                            <i class="fa fa-instagram"></i> 338
+                        </a>
+                        <a href="https://www.facebook.com/BetterSolutions.petrosyan.58/" class="btn btn-facebook btn-round float-right" target="_blank">
+                            <i class="fa fa-facebook-square"></i> 567
+                        </a>
+                    </div>
+                </div>
+                <hr>
+                <div class="card card-profile card-plain">
+                    <div class="row">
+                        <div class="col-md-2">
+                            <div class="card-avatar">
+                                <a href="#pablo">
+                                    <img class="media-object" src="~/MyImages/tim-logo.png" />
+                                </a>
+                                <div class="ripple-container"></div>
+                            </div>
+                        </div>
+                        <div class="col-md-8">
+                            <h4 class="card-title">BetterSolutions</h4>
+                            <p class="description">We believe that the world can be better than it is. You can help me do it, by writing feedback about your experience on our web page. </p>
+                        </div>
+                        <div class="col-md-2">
+                            <a href="https://www.instagram.com/BetterSolutions.petrosyan/" class="btn btn-default pull-right btn-round" target="_blank" style="background-color: #9c27b0; border-color: #9c27b0;">Follow</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="section section-comments">
+        <div class="row">
+            <div class="col-md-8 ml-auto mr-auto">
+                <div class="media-area">
+                    <h3 class="title text-center">@Model.Count Reviews</h3>
+                    @for (int i = 0; i < Model.Count; ++i)
+                    {
+                        var item = Model[i];
+                        <div class="media">
+                            <div class="media-body">
+                                <h4 class="media-heading">@item.Name <small>&#xB7; </small></h4>
+                                <h6 class="text-muted"></h6>
+                                <p>@item.ReviewText</p>
+                            </div>
+                            @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+                            {
+                                <a asp-action="DeleteReview" asp-controller="Home" asp-route-Id="@item.Id" class="btn btn-primary btn-round" type="button" rel="tooltip" data-placement="left" title="Delete" class="btn btn-link">Delete</a>
+                            }
+                        </div>
+                    }
+                </div>
+                <a asp-controller="Home" asp-action="ReviewForm" class="btn  btn-lg btn-round btn-primary title text-center" style="margin-inline-start: 602px;">Write Review</a>
+            </div>
+        </div>
+    </div>
+</div>

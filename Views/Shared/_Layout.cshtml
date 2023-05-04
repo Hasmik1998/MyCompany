@@ -1,0 +1,270 @@
+﻿@{
+    List<MyCompany.Data.StackOverflowQuestion> list = new List<MyCompany.Data.StackOverflowQuestion>();
+}
+<!DOCTYPE html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/png" href="~/MyImages/myLogo.png">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <title>
+        Chess-Up Company
+    </title>
+    <link href="~/css/material-kit.css" rel="stylesheet" />
+    <link href="~/css/demo.css" rel="stylesheet" />
+    <link href="~/css/vertical-nav.css" rel="stylesheet" />
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
+    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:400,700|Material+Icons" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css">
+</head>
+<body class="about-us sidebar-collapse">
+
+    <nav class="navbar navbar-color-on-scroll navbar-transparent    fixed-top  navbar-expand-lg " color-on-scroll="100" id="sectionsNav">
+        <div class="container">
+            <div class="navbar-translate">
+                <a class="navbar-brand">
+                    <div class="logo-big">
+                        <img src="~/MyImages/myLogo.png" class="img-fluid">
+                    </div>
+
+                    <div class="logo-small">
+                        <img src="~/MyImages/Logopink.png" class="img-fluid">
+                    </div>
+                    <h7>Chess-Up</h7>
+                </a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="navbar-toggler-icon"></span>
+                    <span class="navbar-toggler-icon"></span>
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+            </div>
+            <div class="collapse navbar-collapse">
+                <ul class="navbar-nav ml-auto">
+                    <li class="dropdown nav-item">
+
+                        <a href="#" class="dropdown-toggle nav-link" data-toggle="dropdown">
+                            <i class="material-icons">apps</i> Main
+                        </a>
+
+                        <div class="dropdown-menu dropdown-with-icons">
+                            <a asp-controller="Home" asp-action="Index" class="dropdown-item">
+                                <i class="material-icons">store</i> Home
+                            </a>
+                            <a asp-controller="Home" asp-action="AboutUs" class="dropdown-item">
+                                <i class="material-icons">account_balance</i> About Us
+                            </a>
+                            <a asp-controller="Home" asp-action="ContactUs" class="dropdown-item">
+                                <i class="material-icons">location_on</i> Contact Us
+                            </a>
+                            <a asp-controller="Home" asp-action="StackOverflowQuestions" class="dropdown-item">
+                                <i class="material-icons">list</i> Forum
+                            </a>
+                        </div>
+                    </li>
+                    <li class="dropdown nav-item">
+                        <a href="#" class="dropdown-toggle nav-link" data-toggle="dropdown">
+                            <i class="material-icons">view_day</i>Learning
+                        </a>
+                        <div class="dropdown-menu dropdown-with-icons">
+                            <a asp-controller="Problem" asp-action="ProblemIndex" class="dropdown-item">
+                                <i class="material-icons">content_paste</i> Exercises
+                            </a>
+                            <a asp-controller="Problem" asp-action="QuizIndex" class="dropdown-item">
+                                <i class="material-icons">assignment</i> Test
+                            </a>
+                            <a asp-controller="RequestForm" asp-action="ChoosRequests" class="dropdown-item">
+                                <i class="material-icons">dns</i> Requests
+                            </a>
+                        </div>
+                    </li>
+                    <li class="dropdown nav-item">
+                        <a href="#" class="dropdown-toggle nav-link" data-toggle="dropdown">
+                            <i class="material-icons">line_style</i> Story
+                        </a>
+                        <div class="dropdown-menu dropdown-with-icons">
+                            <a asp-controller="TrinerRequestForm" asp-action="DoneRequests" class="dropdown-item">
+                                <i class="material-icons">view_quilt</i> Completed Trainer Requests
+                            </a>
+                            <a asp-controller="RequestForm" asp-action="DoneRequests" class="dropdown-item">
+                                <i class="material-icons">view_day</i>Completed Financial Requests
+                            </a>
+                            <a asp-controller="Home" asp-action="Review" class="dropdown-item">
+                                <i class="material-icons">art_track</i> Reviews and Feedback
+                            </a>
+                        </div>
+                    </li>
+                    <li class="dropdown nav-item">
+                        @if (!User.Identity.IsAuthenticated || (User.Identity.IsAuthenticated && User.IsInRole("Admin")))
+                        {
+                            <a href="#" class="dropdown-toggle nav-link" data-toggle="dropdown">
+                                <i class="material-icons">view_carousel</i> Sections
+                            </a>
+                            <div class="dropdown-menu dropdown-with-icons">
+                                @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+                                {
+                                    <a asp-controller="Account" asp-action="UserRequestIndex" class="dropdown-item">
+                                        <i class="material-icons">person_add</i>Users
+                                    </a>
+                                }
+                                else if (!User.Identity.IsAuthenticated)
+                                {
+                                    <a asp-controller="Account" asp-action="Login" class="dropdown-item">
+                                        <i class="material-icons">fingerprint</i> Login Page
+                                    </a>
+                                    <a asp-controller="Account" asp-action="Registration" class="dropdown-item">
+                                        <i class="material-icons">person_add</i> Signup Page
+                                    </a>
+                                }
+                            </div>
+                        }
+                    </li>
+                    <li class="dropdown nav-item">
+                        @if (User.Identity.IsAuthenticated && !User.IsInRole("Admin"))
+                        {
+                            <a href="#" class="dropdown-toggle nav-link" data-toggle="dropdown">
+                                <i class="material-icons">view_carousel</i> Social
+                            </a>
+                            <div class="dropdown-menu dropdown-with-icons">
+                                <a asp-controller="Account" asp-action="Profile" asp-route-UserName="@User.Identity.Name" class="dropdown-item">
+                                    <i class="material-icons">account_circle</i>Profile
+                                </a>
+                                <a asp-controller="Account" asp-action="Users" class="dropdown-item">
+                                    <i class="material-icons">people</i> Users
+                                </a>
+                                <a asp-controller="Messenger" asp-action="Chats" class="dropdown-item">
+                                    <i class="material-icons">email</i> My Chats
+                                </a>
+
+                            </div>
+                        }
+                    </li>
+                    <li class="dropdown nav-item">
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            <a href="#" class="dropdown-toggle nav-link" data-toggle="dropdown">
+                                <i class="material-icons">account_balance</i> User help page
+                            </a>
+                            <div class="dropdown-menu dropdown-with-icons">
+                                <a asp-controller="MLHelper" asp-action="Retings" class="dropdown-item">
+                                    <i class="material-icons">list</i>Retings
+                                </a>
+                                <a asp-controller="MLHelper" asp-action="ChessGuid" class="dropdown-item">
+                                    <i class="material-icons">view_day</i> Chess Guid
+                                </a>
+                                <a asp-controller="MLHelper" asp-action="Tournament" class="dropdown-item">
+                                    <i class="material-icons">dns</i> Tournament
+                                </a>
+                                <a asp-controller="MLHelper" asp-action="Triners" class="dropdown-item">
+                                    <i class="material-icons">art_track</i> Triners
+                                </a>
+                            </div>
+                        }
+                    </li>
+
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <li class="button-container nav-item iframe-extern" style="padding-left: 10px; margin-top: -10px !important;">
+                            <a class="btn btn-light btn-round btn-block btn-primary" asp-action="SignOut" asp-controller="Account">Sign out</a>
+                        </li>
+                    }
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+
+    <div class="page-header header-filter" style="background-image: url('https://ugc.futurelearn.com/uploads/images/86/01/86011044-5c67-46bd-93e0-9bb7fe1bae15.jpg'); background-size: cover; background-position: top center;">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-8 ml-auto mr-auto text-center">
+                    <h1 class="title">@ViewBag.Title</h1>
+                    <h3>@ViewBag.Decsription1</h3>
+                    <h4>@ViewBag.Decsription</h4>
+                    <h5>@ViewBag.Decsription2</h5>
+
+                    @if (ViewBag.ShowRequest != null && (User.Identity.IsAuthenticated && User.IsInRole("SimpleUser")))
+                    {
+                        <br />
+                        <a asp-controller="RequestForm" asp-action="MyForm" class="btn btn-primary btn-round btn-lg">Add a Financial Request</a>
+                    }
+                    @if (ViewBag.ShowTrinerRequest != null && (User.Identity.IsAuthenticated && User.IsInRole("SimpleUser")))
+                    {
+                        <div>
+                            <a asp-controller="TrinerRequestForm" asp-action="MyForm" class="btn btn-primary btn-round btn-lg">Add a Trainer Request</a>
+                        </div>
+                    }
+                    @if (ViewBag.ShowProblem != null && (User.Identity.IsAuthenticated && User.IsInRole("User")))
+                    {
+                        <br />
+                        <a asp-controller="Problem" asp-action="ProblemForm" class="btn  btn-lg btn-round btn-primary ">Add</a>
+                    }
+                    @if (ViewBag.ShowQuiz != null && (User.Identity.IsAuthenticated && User.IsInRole("User")))
+                    {
+                        <br />
+                        <a asp-controller="Problem" asp-action="QuizForm" class="btn  btn-lg btn-round btn-primary ">Add</a>
+
+                    }
+                    @if (ViewBag.ShowAddQuestion != null && User.Identity.IsAuthenticated)
+                    {
+                        <br />
+                        <a asp-controller="Home" asp-action="StackOverflowQuestionForm" class="btn  btn-lg btn-round btn-primary">Write Question</a>
+                    }
+                    <br>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="main main-raised">
+        <div class="contact-content">
+            @RenderBody()
+        </div>
+    </div><br /><br /><br /><br />
+    <footer class="footer">
+        <div class="container">
+            @*<nav class="float-left">
+                    <ul>
+                        <li>
+                            <a asp-controller="Home" asp-action="AboutUs">
+                                About Us
+                            </a>
+                        </li>
+                        <li>
+                            <a asp-controller="Home" asp-action="ContactUs">
+                                Contact Us
+                            </a>
+                        </li>
+                    </ul>
+                </nav>*@
+            <div class="copyright float-right">
+                &copy;
+                <script>
+                    document.write(new Date().getFullYear())
+                </script>, made with <i class="material-icons">favorite</i> by
+                <strong>BetterSolutions</strong> for a better world.
+            </div>
+        </div>
+    </footer>
+    <script type="text/javascript" src="~/js/jquery.min.js"></script>
+    <script type="text/javascript" src="~/js/popper.min.js"></script>
+    <script type="text/javascript" src="~/js/bootstrap-material-design.min.js"></script>
+    <script type="text/javascript" src="~/js/moment.min.js"></script>
+    <script type="text/javascript" src="~/js/bootstrap-datetimepicker.js"></script>
+    <script type="text/javascript" src="~/js/nouislider.min.js"></script>
+    @*<script src="https://maps.googleapis.com/maps/api/js?key=YOUR_KEY_HERE"></script>*@
+    <script type="text/javascript" src="~/js/bootstrap-tagsinput.js"></script>
+    <script type="text/javascript" src="~/js/bootstrap-selectpicker.js"></script>
+    <script type="text/javascript" src="~/js/jasny-bootstrap.min.js"></script>
+    <script type="text/javascript" src="~/js/jquery.flexisel.js"></script>
+    <script type="text/javascript" src="~/js/modernizr.js"></script>
+    <script type="text/javascript" src="~/js/vertical-nav.js"></script>
+    <script type="text/javascript" src="~/js/demo.js"></script>
+    <script type="text/javascript" src="~/js/material-kit.js"></script>
+
+    <script src="~/js/site.js" asp-append-version="true"></script>
+
+    @RenderSection("Scripts", required: false)
+</body>
+</html>

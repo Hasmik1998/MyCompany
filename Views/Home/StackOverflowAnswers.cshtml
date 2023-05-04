@@ -1,0 +1,55 @@
+﻿@model ValueTuple<MyCompany.Data.StackOverflowQuestion, List<MyCompany.Data.StackOverflowAnswer>>
+@{
+    ViewData["Title"] = "Comments";
+
+    ViewData["Decsription"] = "If life is a game be the winner";
+}
+<div class="section section-text">
+    <div class="section section-blog-info">
+        <div class="row">
+            <div class="col-md-8 ml-auto mr-auto">
+                <div class="row">
+                    <div class="col-md-6"><h4 style="padding-top: 8px;">Question</h4></div>
+                </div>
+                <hr>
+                <div class="card card-profile card-plain">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <h4 class="card-title">@Model.Item1.UserName</h4>
+                            <p class="description">@Model.Item1.Question</p>
+                        </div>
+                        <div class="col-md-2">
+                            <a asp-action="Profile" asp-controller="Account" asp-route-UserName="@Model.Item1.UserName" class="btn btn-default pull-right btn-round" target="_blank" style="background-color: #9c27b0; border-color: #9c27b0;">Profile</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-8 ml-auto mr-auto">
+            <div class="media-area">
+                <h3 class="title text-center">@Model.Item2.Count Answers</h3>
+                @for (int i = 0; i < Model.Item2.Count; ++i)
+                {
+                    var item = Model.Item2[i];
+                    <div class="media">
+                        <div class="media-body">
+                            <a asp-action="Profile" asp-controller="Account" asp-route-Id="@item.UserName">
+                                <h4 class="media-heading">@item.UserName<small>&#xB7; </small></h4>
+                            </a>
+                            <h6 class="text-muted"></h6>
+                            <p>@item.Answer</p>
+                        </div>
+                        @if ((User.Identity.IsAuthenticated && User.IsInRole("Admin")) || (User.Identity.IsAuthenticated && User.Identity.Name.Equals(item.UserName)))
+                        {
+                            <a asp-action="DeleteStackOverflowAnswer" asp-controller="Home" asp-route-Id="@item.Id" class="btn btn-primary btn-round" type="button" rel="tooltip" data-placement="left" title="Delete" class="btn btn-link">Delete</a>
+                            <a asp-action="EditStackOverflowAnswerForm" asp-controller="Home" asp-route-Id="@item.Id" class="btn btn-primary btn-round" type="button" rel="tooltip" data-placement="left" title="Edit" class="btn btn-link">Edit</a>
+                        }
+                    </div>
+                }
+            </div>
+            <a asp-controller="Home" asp-action="StackOverflowAnswerForm" asp-route-Id="@Model.Item1.Id" class="btn  btn-lg btn-round btn-primary title text-center" style="margin-inline-start: 602px;">Write Answer</a>
+        </div>
+    </div>
+</div>

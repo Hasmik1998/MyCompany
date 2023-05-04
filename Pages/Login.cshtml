@@ -1,0 +1,54 @@
+﻿@page
+@model MyCompany.Models.LoginViewModel
+@{
+    Layout = null;
+    ViewBag.Title = "Log In";
+}
+
+
+<header id="gtco-header" class="gtco-cover gtco-cover-md" role="banner"
+        style="background-image: url(~/images/img_bg_1.jpg)" data-stellar-background-ratio="0.5">
+    <div class="overlay"></div>
+    <div class="gtco-container">
+        <div class="row">
+            <div class="col-md-12 col-md-offset-0 text-left">
+                <div class="row row-mt-15em">
+                    <div class="col-md-7 mt-text animate-box" data-animate-effect="fadeInUp">
+                        <span class="intro-text-small">
+                            Hand-crafted by <a href="http://gettemplates.co"
+                                               target="_blank">GetTemplates.co</a>
+                        </span>
+                        <h1 class="cursive-font">All in good taste!</h1>
+                    </div>
+                    <div class="col-md-4 col-md-push-1 animate-box" data-animate-effect="fadeInRight">
+                        <div class="form-wrap">
+                            <div class="tab">
+                                <div class="tab-content">
+                                    <div class="tab-content-inner active" data-content="signup">
+                                        <h3 class="cursive-font">Log In</h3>
+                                        <div class="text-danger" asp-validation-summary="All"></div>
+
+                                        <form asp-action="Login" asp-controller="Account" method="post">
+                                            <input type="hidden" asp-for="ReturnUrl" />
+                                            <div class="form-group">
+                                                <label asp-for="Name">Username</label>
+                                                <div><span asp-validation-for="Name" class="text-danger"></span></div>
+                                                <input asp-for="Name" class="form-control" />
+                                            </div>
+                                            <div class="form-group">
+                                                <label asp-for="Password"></label>
+                                                <div><span asp-validation-for="Password" class="text-danger"></span></div>
+                                                <input asp-for="Password" class="form-control" />
+                                            </div>
+                                            <button class="btn btn-primary" type="submit">Log In</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>

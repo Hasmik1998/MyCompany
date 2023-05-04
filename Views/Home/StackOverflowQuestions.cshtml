@@ -1,0 +1,133 @@
+﻿@model ForumModel
+@{
+    ViewData["Title"] = "Questions";
+    ViewData["Decsription"] = "Forum";
+    List<string> urls = new List<string>();
+    urls.Add("https://image.freepik.com/free-vector/flat-people-with-question-marks-background_23-2148169735.jpg");
+    urls.Add("https://img.freepik.com/free-vector/frequently-asked-questions-landing-page_41910-350.jpg?size=626&ext=jpg");
+    urls.Add("https://img.freepik.com/free-vector/people-ask-question_102902-2341.jpg?size=626&ext=jpg");
+    urls.Add("http://i2.wp.com/wineglitz.com/wp-content/uploads/2019/04/group-people-holding-question-mark-icons_53876-64627.jpg?resize=626%2C455");
+    urls.Add("https://image.freepik.com/free-vector/people-holding-question-marks_23-2148157517.jpg");
+    urls.Add("https://i.pinimg.com/736x/e8/6b/c1/e86bc14b6840b0140c4b732c4958096e.jpg");
+    urls.Add("https://cdn.nohat.cc/thumb/f/720/73062e8fd412426588da.jpg");
+    urls.Add("https://image.freepik.com/free-vector/people-holding-question-marks-background_23-2148137365.jpg");
+    urls.Add("https://i.pinimg.com/736x/c0/6d/bc/c06dbc3d59dccf40a28070a4787a2b2a.jpg");
+    urls.Add("https://image.freepik.com/free-vector/flat-people-holding-question-marks-background_23-2148153016.jpg");
+    urls.Add("https://image.freepik.com/free-vector/flat-people-holding-question-marks_23-2148147403.jpg");
+    urls.Add("https://image.freepik.com/free-vector/flat-people-with-question-marks-background_23-2148167864.jpg");
+    urls.Add("https://image.freepik.com/free-vector/people-holding-question-marks-background_23-2148137348.jpg");
+    urls.Add("https://image.freepik.com/free-vector/people-holding-question-marks-background_23-2148137349.jpg");
+    urls.Add("https://image.freepik.com/free-vector/people-holding-question-marks_23-2148158768.jpg");
+    urls.Add("https://image.freepik.com/free-vector/flat-people-holding-question-marks_23-2148148456.jpg");
+    urls.Add("https://image.freepik.com/free-vector/flat-people-with-question-marks-background_23-2148167865.jpg");
+    urls.Add("https://i.pinimg.com/736x/e1/f2/57/e1f2570fe5576df0b288491e0c9f4ddd.jpg");
+    urls.Add("https://image.freepik.com/free-vector/people-holding-question-marks_23-2148156161.jpg");
+    urls.Add("https://cdn.nohat.cc/thumb/f/720/73062e8fd412426588da.jpg");
+}
+
+<div class="container">
+    <div class="section">
+        <div class="row">
+            <div class="col-md-12">
+                <h2 class="title text-center">Questions @Model.Questions.Count</h2>
+                <br>
+                @using (Html.BeginForm("Search", "Home", FormMethod.Get, new { enctype = "multipart/form-data" }))
+                {
+                    @if (string.IsNullOrEmpty(Model.SearchText))
+                    {
+                        @Html.TextBoxFor(model => Model.SearchText, new { @class = "form-control", @placeholder = "Search question" })
+                        @Html.ValidationMessageFor(model => model.SearchText)
+                    }
+                    else
+                    {
+                        @Html.TextBoxFor(model => Model.SearchText, new { @class = "form-control", @placeholder = Model.SearchText })
+                        @Html.ValidationMessageFor(model => model.SearchText)
+                    }
+                    <button type="submit" class="btn btn-primary btn-round" style="margin-top: -70px; margin-left: 102%">Search</button>
+                }
+
+                <div class="row">
+                    @for (int i = 0; i < Model.Questions.Count; i++)
+                    {
+                        var item = Model.Questions[i];
+                        var random = new Random();
+                        var index = random.Next(urls.Count);
+                        <div class="col-md-4">
+                            <div class="card card-blog">
+                                <div class="card-header card-header-image">
+                                    <img class="img img-raised" src=@urls[index] />
+                                </div>
+                                <div class="card-body">
+                                    <a asp-action="StackOverflowAnswers" asp-controller="Home" asp-route-Id="@item.Id">
+                                        <h4 style="color:black;">@item.Question</h4>
+                                    </a>
+                                    <p class="card-description">
+                                        @item.UserName
+                                    </p>
+                                </div>
+                                @if ((User.Identity.IsAuthenticated && User.IsInRole("Admin")) || (User.Identity.IsAuthenticated && User.Identity.Name.Equals(item.UserName)))
+                                {
+                                    <a asp-action="DeleteStackOverflowQuestion" asp-controller="Home" asp-route-Id="@item.Id" class="btn btn-primary btn-round" type="button" rel="tooltip" data-placement="left" title="Delete" style="width: 40%; margin: auto;margin-bottom: 5px;">Delete</a>
+                                    <a asp-action="EditStackOverflowQuestionForm" asp-controller="Home" asp-route-Id="@item.Id" class="btn btn-primary btn-round" type="button" rel="tooltip" data-placement="left" title="Edit" style="width: 40%; margin: auto;margin-bottom: 5px;">Edit</a>
+                                }
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+
+<script>
+    function Search() {
+        $.ajax({
+            type: "Get",
+            url: "Search",
+            data: { text: $('#myInput').val() },
+            contentType: "application/json;charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                //MakeCallToRefreshWithNewData()
+            },
+        });
+
+        //// declare variables
+        //var input, filter, ul, li, p, i, txtvalue, hr;
+        //input = document.getElementById('myInput');
+        //filter = input.value.toUpperCase();
+        //ul = document.getElementById("allcontent");
+        //li = ul.getElementsByClassName('card');
+
+        //// loop through all list items, and hide those who don't match the search query
+        //for (i = 0; i < li.length; i++) {
+        //    a = li[i].getElementsByTagName("h4")[0];
+        //    txtvalue = a.textContent || a.innerText;
+        //    if (txtvalue.toUpperCase().indexOf(filter) > -1) {
+        //        li[i].style.display = "";
+        //    } else {
+        //        li[i].style.display = "none";
+        //    }
+        //}
+    }
+
+    $("#lnk").click(function (evt) {
+        var fakedUri = $("#lnk").prop("href");
+        var uri = fakedUri.replace("x", $("#myInput").val());
+        fakedUri = uri;
+        //$("#lnk").prop("href") = uri.val;
+        alert(uri);
+    });
+    function m() {
+        var a = document.getElementById("btn");
+        var b = $('#myInput').val();
+        a.setAttribute("asp-route-text", b);
+    }
+    function ResetRuslt() {
+        $.ajax({
+            type: "Get",
+            url: "ResetResult",
+        });
+    }
+</script>

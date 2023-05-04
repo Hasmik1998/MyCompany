@@ -1,0 +1,83 @@
+﻿@model List<MyCompany.Data.RegistrationRequest>
+@{
+    ViewData["Decsription"] = "";
+    ViewData["Title"] = "User Request";
+}
+<div class="container">
+    <div class="section">
+        <div class="row">
+            <div class="col-md-12">
+                <h2 class="title text-center">Requested Users</h2>
+                <br>
+                @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+                {
+                    <div class="row">
+                        @for (int i = 0; i < Model.Count; i++)
+                        {
+                            var item = Model[i];
+                            if (!item.Accept)
+                            {
+                                <div class="col-md-4">
+                                    <div class="card card-blog">
+                                        <div class="card-header card-header-image">
+                                            <a href="#pablo">
+                                                <img class="img img-raised" src="@item.Image">
+                                            </a>
+                                        </div>
+                                        <div class="card-body">
+                                            <h6 class="category text-info" style="margin-top: 0px;">@item.Name @item.SurName</h6>
+                                            <p class="card-description">
+                                                @item.Name
+                                                <h5>@item.SurName</h5>
+                                                @item.Email
+                                            </p>
+                                        </div>
+                                        <a asp-action="AcceptRequest" asp-controller="Account" asp-route-Id="@item.Id" class="book-room-btn btn palatin-btn">Accept</a>
+                                        <a asp-action="DeleteDatabase" asp-controller="Account" asp-route-Id="@item.Id" class="book-room-btn btn palatin-btn">Delete</a>
+
+                                    </div>
+                                </div>
+                            }
+                        }
+                    </div>
+                }
+
+            </div>
+            <h2 class="title text-center">Users</h2>
+            <br>
+
+            <div class="row" style="    margin-top: 19px;">
+                @for (int i = 0; i < Model.Count; i++)
+                {
+                    var item = Model[i];
+                    if (item.Accept)
+                    {
+                        <div class="col-md-4">
+                            <div class="card card-blog">
+                                <div class="card-header card-header-image">
+                                    <a href="#pablo">
+                                        <img class="img img-raised" src="@item.Image">
+                                    </a>
+                                </div>
+                                <div class="card-body">
+                                    <h6 class="category text-info" style="margin-top: 0px;">@item.Name @item.SurName</h6>
+                                    <p class="card-description">
+                                    <p>@item.Email</p>
+                                    <p>@item.Phone</p>
+                                    <p>@item.About</p>
+                                    <p> @item.UserType </p>
+                                    </p>
+                                </div>
+                                @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+                                {
+                                    <a asp-action="EditProfile" asp-controller="Account" asp-route-Id="@item.Id" class="book-room-btn btn palatin-btn">Edit User</a>
+                                    <a asp-action="DeleteRequest" asp-controller="Account" asp-route-Id="@item.Id" class="book-room-btn btn palatin-btn">Delete User</a>
+                                }
+                            </div>
+                        </div>
+                    }
+                }
+            </div>
+        </div>
+    </div>
+</div>
