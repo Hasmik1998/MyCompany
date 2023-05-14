@@ -20,6 +20,7 @@ using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 
 namespace MyCompany.Controllers
 {
@@ -174,7 +175,7 @@ namespace MyCompany.Controllers
                 path = @"C:\Users\hasmik.petrosyan\Desktop\Capstone\decreaseJson.json";
                 ViewBag.predictedText = "Your score will decrease in the upcoming year";
             }
-            else 
+            else
             {
                 ViewBag.predictedText = "Your score will increase in the upcoming year";
                 path = @"C:\Users\hasmik.petrosyan\Desktop\Capstone\increaseJson.json";
@@ -202,8 +203,52 @@ namespace MyCompany.Controllers
         [HttpGet]
         public IActionResult Tournament()
         {
-            List<string> trainerNames = new List<string> { "Չարենցավան, 3-րդ կարգի որակավորման մրցաշար", "ՀՀ դպրոցականների 17-րդ օլիմպիադա.Մեղրի", "Դպրոցականների 17-րդ  օլիմպիադա, փուլ 2-րդ", "ՀՀ դպրոցականների 17-րդ օլիմպիադա Թալինի տարածաշրջան", "Դպրոցական օլիմպիադայի 2-րդ փուլ Բաղրամյանի տարածաշրջան", "2-րդ կարգի որակավորման մրցաշար- Արաբկիր", "ՀՀ շախմատի դպրոցականների 17-րդ օլիմպիադա Արարատի տարածաշրջան", "Մալաթիա ՇՄՄ  4-րդ կարգի  որակավորման մրցաշար (Ա խումբ մինչև 8տ.)", "ՀՀ շախմատի դպրոցականների 17-րդ օլիմպիադա Մասիսի տարածաշրջան", };
-            return View(trainerNames);
+            string url = "https://chess-results.com/fed.aspx?lan=1&fed=ARM";
+
+            // Create a new HtmlWeb instance
+            HtmlWeb web = new HtmlWeb();
+
+            // Load the HTML document from the URL
+            HtmlDocument doc = web.Load(url);
+
+            // Scrape the tournament name
+            HtmlNode tableNode = doc.DocumentNode.SelectSingleNode("//table[@class='CRs2']");
+            List<TournamentModel> tournaments = new List<TournamentModel>();
+            if (tableNode != null)
+            {
+                // Get all the <tr> elements within the table
+                IEnumerable<HtmlNode> trNodes = tableNode.SelectNodes(".//tr");
+                if (trNodes != null)
+                {
+                    // Iterate over the <tr> elements and process them
+                    foreach (HtmlNode trNode in trNodes)
+                    {
+                        TournamentModel currentTournament = new TournamentModel();
+                        int i = 0;
+                        // Process each <tr> element as needed
+                        Console.WriteLine("Row:");
+                        foreach (HtmlNode tdNode in trNode.ChildNodes)
+                        {
+                            string text = HttpUtility.HtmlDecode(tdNode.InnerText.Trim());
+                            if (i == 0)
+                            {
+                                currentTournament.Id = text;
+                            }
+                            else if (i == 1)
+                            {
+                                currentTournament.TournamentName = text;
+                            }
+                            else if (i == 2)
+                            {
+                                currentTournament.LastUpdate = text;
+                            }
+                            i++;
+                        }
+                        tournaments.Add(currentTournament);
+                    }
+                }
+            }
+            return View(tournaments);
             //var results = FetchChessResults();
             //return View(results);
             //string responseText = ChessResultsFetcher.FetchChessResults();

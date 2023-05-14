@@ -1,9 +1,8 @@
-﻿@model List<string>
+﻿@model List<MyCompany.Models.TournamentModel>
 
 @{
     ViewData["Title"] = "Tournament";
-    ViewData["Decsription1"] = "Here you can find all retings.";
-    ViewData["Decsription2"] = "We believe in good moves.";
+    ViewData["Decsription1"] = "Here you can find all ongoing tournaments.";
 }
 <div class="section section-text">
     <div class="row">
@@ -11,14 +10,18 @@
             <table class="table">
                 <thead>
                             <tr>
-                                <th>Tournament Name</th>
+                                <th>@Model[0].Id</th>
+                                <th>@Model[0].TournamentName</th>
+                                <th>@Model[0].LastUpdate</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach (var tourName in Model)
+                            @for(int i=1 ; i<@Model.Count; i++)
                             {
                                 <tr>
-                                    <td>@tourName</td>
+                                    <td>@Model[i].Id</td>
+                                    <td>@Model[i].TournamentName</td>
+                                    <td>@Model[i].LastUpdate</td>
                                 </tr>
                             }
                         </tbody>
