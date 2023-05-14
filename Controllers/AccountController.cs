@@ -47,7 +47,7 @@ namespace MyCompany.Controllers
             {
                 ViewBag.Found = true;
             }
-            else 
+            else
             {
                 ViewBag.Found = false;
             }
@@ -105,7 +105,28 @@ namespace MyCompany.Controllers
         [HttpGet]
         public IActionResult Registration()
         {
-            return View();
+            var passwordSettings = _context.PasswordSecurity.ToList();
+            PasswordSecurityModel passwordSecurityModel = new PasswordSecurityModel();
+            if (passwordSettings.Count() == 0)
+            {
+                passwordSecurityModel.MinimumLength = 8;
+                passwordSecurityModel.UppercaseNum = 1;
+                passwordSecurityModel.LowercaseNum = 1;
+                passwordSecurityModel.NumberCharacters = 1;
+                passwordSecurityModel.SpecialCharacters = 1;
+            }
+            else
+            {
+                var passwordSetting = passwordSettings.LastOrDefault();
+                passwordSecurityModel.MinimumLength = passwordSetting.MinimumLength;
+                passwordSecurityModel.UppercaseNum = passwordSetting.UpercaseNum;
+                passwordSecurityModel.LowercaseNum = passwordSetting.LowercaseNum;
+                passwordSecurityModel.NumberCharacters = passwordSetting.NumberCharacters;
+                passwordSecurityModel.SpecialCharacters = passwordSetting.SpecialCharacters;
+            }
+            var result = new Tuple<RegistrationRequestModel, PasswordSecurityModel>(new RegistrationRequestModel(),passwordSecurityModel);
+
+            return View(result);
         }
 
         /// <summary>
@@ -121,7 +142,7 @@ namespace MyCompany.Controllers
             {
                 return RedirectToAction("Registration");
             }
-            else 
+            else
             {
                 await Response.WriteAsync(result);
                 return RedirectToAction("Registration");

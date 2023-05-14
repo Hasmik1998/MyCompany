@@ -1,4 +1,4 @@
-﻿@model MyCompany.Models.RegistrationRequestModel
+﻿@model Tuple<MyCompany.Models.RegistrationRequestModel,MyCompany.Models.PasswordSecurityModel>
 @{
     Layout = null;
 }
@@ -108,6 +108,9 @@
                                     <a asp-controller="Account" asp-action="UserRequestIndex" class="dropdown-item">
                                         <i class="material-icons">person_add</i>Users
                                     </a>
+                                    <a asp-controller="MLHelper" asp-action="PasswordSecurity" class="dropdown-item">
+                                        <i class="material-icons">account_circle</i>Password Security
+                                    </a>
                                 }
                                 else if (!User.Identity.IsAuthenticated)
                                 {
@@ -152,7 +155,7 @@
                                     <i class="material-icons">account_circle</i>Retings
                                 </a>
                                 <a asp-controller="MLHelper" asp-action="ChessGuid" class="dropdown-item">
-                                    <i class="material-icons">people</i> Chess Guid
+                                    <i class="material-icons">people</i> Chess Guide
                                 </a>
                                 <a asp-controller="MLHelper" asp-action="Tournament" class="dropdown-item">
                                     <i class="material-icons">email</i> Tournament
@@ -200,13 +203,13 @@
                                                 <i class="material-icons">face</i>
                                             </span>
                                             <div>
-                                                <input class="form-control" asp-for="@Model.Name" style="inline-size: 400px;" placeholder="Name" required>
+                                                <input class="form-control" asp-for="@Model.Item1.Name" style="inline-size: 400px;" placeholder="Name" required>
                                                 <span class="bmd-help">This field is required.</span>
                                             </div>
                                         </div>
 
                                         @*@Html.TextBoxFor(model => model.Name, new { @class = "form-control", @placeholder = "Name" })*@
-                                        @Html.ValidationMessageFor(model => model.Name)
+                                        @Html.ValidationMessageFor(model => model.Item1.Name)
                                     </div>
                                     <div class="form-group input-group col-lg-12  m-t-reg">
                                         <div class="input-group-prepend">
@@ -215,11 +218,11 @@
                                             </span>
                                         </div>
                                         <div>
-                                            <input class="form-control" asp-for="@Model.SurName" style="inline-size: 400px;" placeholder="Surname" required>
+                                            <input class="form-control" asp-for="@Model.Item1.SurName" style="inline-size: 400px;" placeholder="Surname" required>
                                             <span class="bmd-help">This field is required.</span>
                                         </div>
                                         @*@Html.TextBoxFor(model => model.SurName, new { @class = "form-control", @placeholder = "SurName" })*@
-                                        @Html.ValidationMessageFor(model => model.SurName)
+                                        @Html.ValidationMessageFor(model => model.Item1.SurName)
                                     </div>
                                     <div class="form-group input-group col-lg-12  m-t-regt bmd-form-group">
                                         <div class="input-group-prepend">
@@ -228,7 +231,7 @@
                                             </span>
 
                                             @using MyCompany.Utilities
-                                            <select class="selectpicker" asp-for="@Model.UserType" data-style="select-with-transition" title="Select User Type" data-size="7" required>
+                                            <select class="selectpicker" asp-for="@Model.Item1.UserType" data-style="select-with-transition" title="Select User Type" data-size="7" required>
                                                 <option value="2">Trainer User</option>
                                                 <option value="3">User</option>
                                             </select>
@@ -238,7 +241,7 @@
                                             { new SelectListItem{Text="User", Value="True",Selected=true},
                                               new SelectListItem{Text="TrainnerUser", Value="False"}})*@
                                         @*@Html.DropDownListFor(model => model.UserType, new SelectList(Enum.GetValues(typeof(UserType))), string.Empty, new { @class = "form-control", @placeholder = "User Type" })*@
-                                        @Html.ValidationMessageFor(model => model.UserType)
+                                        @Html.ValidationMessageFor(model => model.Item1.UserType)
                                     </div>
                                     <div class="form-group input-group col-lg-12 m-t-reg ">
                                         <div class="input-group-prepend">
@@ -247,11 +250,11 @@
                                             </span>
                                         </div>
                                         <div>
-                                            <input class="form-control" asp-for="@Model.Phone" style="inline-size: 400px;" placeholder="Phone" required>
+                                            <input class="form-control" asp-for="@Model.Item1.Phone" style="inline-size: 400px;" placeholder="Phone" required>
                                             <span class="bmd-help">This field is required.</span>
                                         </div>
                                         @*@Html.TextBoxFor(model => model.Phone, new { @class = "form-control", @placeholder = "Phone" })*@
-                                        @Html.ValidationMessageFor(model => model.Phone)
+                                        @Html.ValidationMessageFor(model => model.Item1.Phone)
                                     </div>
                                     <div class="form-group input-group col-lg-12 m-t-reg">
                                         <div class="input-group-prepend">
@@ -260,11 +263,11 @@
                                             </span>
                                         </div>
                                         <div>
-                                            <input class="form-control" asp-for="@Model.Email" style="inline-size: 400px;" placeholder="Email" required>
+                                            <input class="form-control" asp-for="@Model.Item1.Email" style="inline-size: 400px;" placeholder="Email" required>
                                             <span class="bmd-help">This field is required.</span>
                                         </div>
                                         @*@Html.TextBoxFor(model => model.Email, new { @class = "form-control", @placeholder = "Email" })*@
-                                        @Html.ValidationMessageFor(model => model.Email)
+                                        @Html.ValidationMessageFor(model => model.Item1.Email)
                                     </div>
                                     <div class="form-group input-group col-lg-12 m-t-reg">
                                         <div class="input-group-prepend">
@@ -272,9 +275,9 @@
                                                 <i class="material-icons">lock_outline</i>
                                             </span>
                                         </div>
-                                        <input class="form-control" data-val="true" data-val-requires="The Password field is required" id="Password" 
-                                               placeholder="Password" name="Password" type="password" minlength="8" pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{8,12}$" title="Password must have one capital, one special character and one numerical character. It can not start with a special character or a digit."  required/>
-                                        @Html.ValidationMessageFor(model => model.Password)
+                                        <input class="form-control" data-val="true" data-val-requires="The Password field is required" id="Password"
+                                               placeholder="Password" name="Password" type="password" title="Password must have one capital, one special character and one numerical character. It can not start with a special character or a digit." required />
+                                        @Html.ValidationMessageFor(model => model.Item1.Password)
                                     </div>
                                     <div class="form-group input-group col-lg-12  m-t-regt">
                                         <div class="input-group-prepend">
@@ -283,10 +286,10 @@
                                             </span>
                                         </div>
                                         <div>
-                                            <input class="form-control" asp-for="@Model.About" style="inline-size: 400px;" placeholder="About" required>
+                                            <input class="form-control" asp-for="@Model.Item1.About" style="inline-size: 400px;" placeholder="About" required>
                                         </div>
                                         @*@Html.TextBoxFor(model => model.About, new { @type = "text" })*@
-                                        @Html.ValidationMessageFor(model => model.About)
+                                        @Html.ValidationMessageFor(model => model.Item1.About)
                                     </div>
 
                                     <div class="form-group input-group col-lg-12  m-t-regt bmd-form-group">
@@ -295,13 +298,13 @@
                                                 <i class="material-icons">face</i>
                                             </span>
                                         </div>
-                                        @Html.LabelFor(model => model.Avatar)
-                                        @Html.TextBoxFor(model => model.Avatar, new { @type = "file", @class = "bmd-form-group", Style = "height: 101% !important; padding-left: 32px!important;" })
-                                        @Html.ValidationMessageFor(model => model.Avatar)
+                                        @Html.LabelFor(model => model.Item1.Avatar)
+                                        @Html.TextBoxFor(model => model.Item1.Avatar, new { @type = "file", @class = "bmd-form-group", Style = "height: 101% !important; padding-left: 32px!important;" })
+                                        @Html.ValidationMessageFor(model => model.Item1.Avatar)
                                     </div>
                                 </div>
                                 <div class="text-center m-t-reg">
-                                    <button class="btn btn-primary btn-round" type="submit" onclick="Signup()">SignUp</button>
+                                    <button class="btn btn-primary btn-round" type="submit" onclick="validate()">SignUp</button>
                                 </div>
 
                                 @*<div class="form-group">
@@ -343,5 +346,21 @@
     <script type="text/javascript" src="~/js/material-kit.js"></script>
 
     <script src="~/js/site.js" asp-append-version="true"></script>
+    <script>
+        function validate()
+        {
+            let passwordInput = document.getElementById("Password").value;
+            var numUpper = (passwordInput.match(/[A-Z]/g) || []).length;
+            var numLower = (passwordInput.match(/[a-z]/g) || []).length;
+            var numNum = (passwordInput.match(/[0-9]/g) || []).length;
+            var numSpec = (passwordInput.match(/[^\w\s]/g) || []).length;
+
+            if (!(passwordInput.length >= @Model.Item2.MinimumLength && numUpper >= @Model.Item2.UppercaseNum && numLower >= @Model.Item2.LowercaseNum && numNum >= @Model.Item2.NumberCharacters && numSpec >= @Model.Item2.SpecialCharacters))
+            {
+                alert("Password must have one capital, one special character and one numerical character. It can not start with a special character or a digit.");
+            }
+        }
+    </script>
+
 </body>
 </html>

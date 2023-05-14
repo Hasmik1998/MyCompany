@@ -10,8 +10,8 @@ using MyCompany.Data;
 namespace Chess_Up.Migrations
 {
     [DbContext(typeof(CompanyDbContext))]
-    [Migration("20230429163027_InitialMigration")]
-    partial class InitialMigration
+    [Migration("20230505125017_Final")]
+    partial class Final
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -310,6 +310,33 @@ namespace Chess_Up.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Messages");
+                });
+
+            modelBuilder.Entity("MyCompany.Data.PasswordSecurity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("LowercaseNum")
+                        .HasColumnType("int");
+
+                    b.Property<int>("MinimumLength")
+                        .HasColumnType("int");
+
+                    b.Property<int>("NumberCharacters")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SpecialCharacters")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UppercaseNum")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("PasswordSecurity");
                 });
 
             modelBuilder.Entity("MyCompany.Data.Problem", b =>

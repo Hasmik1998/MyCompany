@@ -2,6 +2,7 @@
 using Chess_Up.Models;
 using Chess_Up.Services;
 using HtmlAgilityPack;
+using MarkovSharp.TokenisationStrategies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -10,10 +11,14 @@ using MyCompany.Data;
 using MyCompany.Models;
 using MyCompany.Repository;
 using MyCompany.Utilities;
+using Newtonsoft.Json;
 using System;
+using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace MyCompany.Controllers
@@ -34,7 +39,7 @@ namespace MyCompany.Controllers
             _context = context;
             _repository = repository;
         }
-      
+
         [Route("~/RequestForm/ChessGuid")]
         [HttpGet]
         public IActionResult ChessGuid()
@@ -137,9 +142,54 @@ namespace MyCompany.Controllers
 
         }
 
-            [HttpGet]
-        public IActionResult UpcomingGrowth()
+        [HttpGet]
+        public async Task<IActionResult> UpcomingGrowth()
         {
+            string name = User.Identity.Name;
+
+            RegistrationRequest user = _context.RegistrationRequests.FirstOrDefault(a => a.Email == name);
+            string[] split = user.SurName.Split(' ');
+            string fullName = split[0] + " " + user.Name + " " + split[1];
+
+            RatingsData data = _context.RatingsData.FirstOrDefault(a => a.Full_Name == fullName);
+
+            using var client = new HttpClient();
+
+            //Set the request URL and JSON data
+            string url = "http://127.0.0.1:8000/predict";
+            var jsonData = "{\"scores\":" + $"[{data.rating_standard_2018}, {data.rating_standard_2019}, {data.rating_standard_2020}, {data.rating_standard_2021}, {data.rating_standard_2022}" + "]}";
+
+            // Create the HttpContent object with the JSON data
+            var content = new StringContent(jsonData, Encoding.UTF8, "application/json");
+
+            // Send the POST request with the JSON data in the request body
+            var response = await client.PostAsync(url, content);
+
+            // Read the response content as a string
+            var responseContent = await response.Content.ReadAsStringAsync();
+
+            string path = "";
+            if (responseContent.Contains("0"))
+            {
+                path = @"C:\Users\hasmik.petrosyan\Desktop\Capstone\decreaseJson.json";
+                ViewBag.predictedText = "Your score will decrease in the upcoming year";
+            }
+            else 
+            {
+                ViewBag.predictedText = "Your score will increase in the upcoming year";
+                path = @"C:\Users\hasmik.petrosyan\Desktop\Capstone\increaseJson.json";
+            }
+
+            var model = new StringMarkov();
+            var readResult = System.IO.File.ReadAllText(path);
+            IEnumerable<string> ExampleData = JsonConvert.DeserializeObject<string[]>(readResult);
+
+
+            model.Learn(ExampleData);
+
+            var generatedText = model.Walk();
+            ViewBag.text = generatedText.First();
+
             return View();
         }
 
@@ -168,225 +218,41 @@ namespace MyCompany.Controllers
 
         [HttpGet]
         [Authorize(Roles = "Admin")]
-        public IActionResult UserRequestIndex()
+        public IActionResult PasswordSecurity()
         {
-            ViewBag.ShowRequest = true;
-
-            return View(_repository.GetUsers());
-        }
-
-        /// <summary>
-        /// Delete request
-        /// </summary>
-        /// <param name="Id"></param>
-        /// <returns></returns>
-        [HttpGet]
-        [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> DeleteRequest(int Id)
-        {
-            var model = _context.RegistrationRequests.FirstOrDefault(p => p.Id == Id);
-            IdentityUser user = await _userManager.FindByEmailAsync(model.Email);
-            await _userManager.DeleteAsync(user);
-
-            _context.RegistrationRequests.Remove(model);
-            _context.SaveChanges();
-
-            MailModel mail = new MailModel();
-            mail.ToMail = new System.Collections.Generic.List<string>();
-            mail.ToMail.Add(model.Email);
-            mail.Subject = "Account Ban";
-            mail.Body = $"Dear {model.Name} {model.SurName}, This email is to notify you that your account has been deleted. If you want to know the specific reason of the denial feel free to give us a call with the number provided on our website";
-
-            MailSenderService.SendMail(mail);
-
-            return RedirectToAction("UserRequestIndex");
-        }
-
-        /// <summary>
-        /// Delete from database
-        /// </summary>
-        /// <param name="Id"></param>
-        /// <returns></returns>
-        [HttpGet]
-        [Authorize(Roles = "Admin")]
-        public IActionResult DeleteDatabase(int Id)
-        {
-            _repository.DeleteDatabase(Id);
-
-
-            return RedirectToAction("UserRequestIndex");
-        }
-
-        /// <summary>
-        /// Accept registration Request
-        /// </summary>
-        /// <param name="Id"></param>
-        /// <returns></returns>
-        [HttpGet]
-        [Route("~/Account/UserRequestIndex/AcceptRequest/{Id}")]
-        [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> AcceptRequest(int Id)
-        {
-            var model = _context.RegistrationRequests.FirstOrDefault(p => p.Id == Id);
-            IdentityUser user = new IdentityUser()
-            {
-                UserName = model.Email,
-                Email = model.Email,
-            };
-
-            string role = "";
-
-            if (model.UserType == Utilities.UserType.TrainnerUser)
-            {
-                role = "User";
-            }
-            else
-            {
-                role = "SimpleUser";
-            }
-
-            var result = await _userManager.CreateAsync(user, model.Password);
-
-            if (result.Succeeded)
-            {
-                await _userManager.AddToRoleAsync(user, role);
-            }
-            else
-            {
-                return RedirectToAction("UserRequestIndex");
-            }
-
-            model.Accept = true;
-
-            _context.RegistrationRequests.Update(model);
-            _context.SaveChanges();
-
-            MailModel mail = new MailModel();
-            mail.ToMail = new System.Collections.Generic.List<string>();
-            mail.ToMail.Add(model.Email);
-            mail.Subject = "Account approval";
-            mail.Body = $"Dear {model.Name} {model.SurName}, This email is to notify you that your account has been approved, you're free to login now and enjoy all the features of the website";
-
-            MailSenderService.SendMail(mail);
-
-            return RedirectToAction("UserRequestIndex");
-        }
-
-        /// <summary>
-        /// Get all users
-        /// </summary>
-        /// <returns></returns>
-        [HttpGet]
-        [Authorize(Roles = "User,SimpleUser")]
-        public IActionResult Users()
-        {
-            UsersModel model = new UsersModel();
-            List<RegistrationRequest> users = _context.RegistrationRequests.ToList();
-
-            if (Searched)
-            {
-                model = FindedUsers;
-                Searched = false;
-
-                return View(model);
-            }
-
-            // remove current user
-            users.Remove(users.FirstOrDefault(a => a.Email == User.Identity.Name));
-
-            model.Users = users;
-            return View(model);
-        }
-
-
-        [HttpGet]
-        [Route("~/Account/Profile/EditProfile/{Id}")]
-        [Authorize]
-        public IActionResult EditProfile(int Id)
-        {
-            ViewBag.Id = Id;
-            var user = _context.RegistrationRequests.FirstOrDefault(a => a.Id == Id);
-            RegistrationRequestModel model = new RegistrationRequestModel()
-            {
-                Name = user.Name,
-                SurName = user.SurName,
-                Phone = user.Phone,
-                Email = user.Email,
-                About = user.About
-            };
-
-            return View(model);
+            var result = _context.PasswordSecurity.ToList();
+            if (result.Count() == 0)
+                return View();
+            return View(result.LastOrDefault());
         }
 
         [HttpPost]
-        [Route("~/Account/Profile/EditProfile/{Id}")]
-        [Authorize]
-        public async Task<IActionResult> EditProfile(RegistrationRequestModel model, int Id)
+        public async Task<IActionResult> PasswordSecurity(PasswordSecurity model)
         {
-            try
+            var records = _context.PasswordSecurity.ToList();
+            var lastRecord = records.Count() > 0 ? records.LastOrDefault() : null;
+            int id = lastRecord == null ? 1 : lastRecord.Id + 1;
+            PasswordSecurity result = new PasswordSecurity()
             {
-                bool mailChanged = false;
-                var base64 = "";
-                if (model.Avatar != null)
-                {
-                    var tempImage = System.Drawing.Image.FromStream(model.Avatar.OpenReadStream());
-                    var result = Utility.ResizeImage(tempImage, 300, 300);
-                    base64 = string.Format("data:image/jpg; base64, {0}", Convert.ToBase64String(Utility.ImageToByte2(result)));
-                    model.UserImage = base64;
-                }
+                Id = id,
+                MinimumLength = model.MinimumLength,
+                LowercaseNum = model.LowercaseNum,
+                UpercaseNum = model.UpercaseNum,
+                NumberCharacters = model.NumberCharacters,
+                SpecialCharacters = model.SpecialCharacters
+            };
 
-                var user = _context.RegistrationRequests.FirstOrDefault(a => a.Id == Id);
-
-                user.Name = string.IsNullOrEmpty(model.Name) ? user.Name : model.Name;
-                user.SurName = string.IsNullOrEmpty(model.SurName) ? user.SurName : model.SurName;
-                user.Phone = string.IsNullOrEmpty(model.Phone) ? user.Phone : model.Phone;
-                user.About = string.IsNullOrEmpty(model.About) ? user.About : model.About;
-                user.Image = string.IsNullOrEmpty(model.UserImage) ? user.Image : model.UserImage;
-
-                IdentityUser currentUser = await _userManager.FindByEmailAsync(user.Email);
-
-                if (!string.IsNullOrEmpty(model.Password))
-                {
-                    await _userManager.ChangePasswordAsync(currentUser, user.Password, model.Password);
-
-                    user.Password = model.Password;
-                }
-
-
-                if (!model.Email.Equals(user.Email))
-                {
-                    mailChanged = true;
-                    string token = await _userManager.GenerateChangeEmailTokenAsync(currentUser, model.Email);
-                    await _userManager.ChangeEmailAsync(currentUser, model.Email, token);
-                    await _userManager.SetUserNameAsync(currentUser, model.Email);
-
-                    user.Email = model.Email;
-                }
-
-                _context.Update(user);
-                await _context.SaveChangesAsync();
-
-                if (mailChanged)
-                {
-                    return RedirectToAction("SignOut");
-                }
-
-                if (User.IsInRole("Admin"))
-                {
-                    return RedirectToAction("UserRequestIndex");
-                }
-                return RedirectToAction("Profile", new { UserName = user.Email });
+            if (result == null)
+            {
+                return RedirectToAction("PasswordSecurity");
             }
-            catch (Exception ex)
+            else
             {
-                string strMsg = "Something Went Wrong or not all required fileds are filled try again";
-                string script = "<script language=\"javascript\" type=\"text/javascript\">alert('" + strMsg + "'); window.location='EditProfile'; </script>";
-                await Response.WriteAsync(script);
-
-                return View(model);
+                await _context.PasswordSecurity.AddAsync(result);
+                await _context.SaveChangesAsync();
+                return RedirectToAction("ChessGuid");
             }
         }
-
         public IActionResult Search(string SearchText)
         {
             Searched = true;

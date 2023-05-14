@@ -310,6 +310,33 @@ namespace Chess_Up.Migrations
                     b.ToTable("Messages");
                 });
 
+            modelBuilder.Entity("MyCompany.Data.PasswordSecurity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("LowercaseNum")
+                        .HasColumnType("int");
+
+                    b.Property<int>("MinimumLength")
+                        .HasColumnType("int");
+
+                    b.Property<int>("NumberCharacters")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SpecialCharacters")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UppercaseNum")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("PasswordSecurity");
+                });
+
             modelBuilder.Entity("MyCompany.Data.Problem", b =>
                 {
                     b.Property<int>("Id")

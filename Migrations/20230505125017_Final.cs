@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Chess_Up.Migrations
 {
-    public partial class InitialMigration : Migration
+    public partial class Final : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -75,6 +75,23 @@ namespace Chess_Up.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Messages", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "PasswordSecurity",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    MinimumLength = table.Column<int>(nullable: false),
+                    LowercaseNum = table.Column<int>(nullable: false),
+                    UppercaseNum = table.Column<int>(nullable: false),
+                    NumberCharacters = table.Column<int>(nullable: false),
+                    SpecialCharacters = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PasswordSecurity", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -407,6 +424,9 @@ namespace Chess_Up.Migrations
 
             migrationBuilder.DropTable(
                 name: "Messages");
+
+            migrationBuilder.DropTable(
+                name: "PasswordSecurity");
 
             migrationBuilder.DropTable(
                 name: "Problems");

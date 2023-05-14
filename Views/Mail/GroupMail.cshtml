@@ -110,6 +110,9 @@
                                     <a asp-controller="Account" asp-action="UserRequestIndex" class="dropdown-item">
                                         <i class="material-icons">person_add</i>Users
                                     </a>
+                                    <a asp-controller="MLHelper" asp-action="PasswordSecurity" class="dropdown-item">
+                                        <i class="material-icons">account_circle</i>Password Security
+                                    </a>
                                 }
                                 else if (!User.Identity.IsAuthenticated)
                                 {
@@ -163,7 +166,7 @@
                                     <i class="material-icons">account_circle</i>Retings
                                 </a>
                                 <a asp-controller="MLHelper" asp-action="ChessGuid" class="dropdown-item">
-                                    <i class="material-icons">people</i> Chess Guid
+                                    <i class="material-icons">people</i> Chess Guide
                                 </a>
                                 <a asp-controller="MLHelper" asp-action="Tournament" class="dropdown-item">
                                     <i class="material-icons">email</i> Tournament

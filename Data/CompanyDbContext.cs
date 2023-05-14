@@ -33,6 +33,8 @@ namespace MyCompany.Data
 
         public DbSet<RatingsData> RatingsData { get; set;}
 
+        public DbSet<PasswordSecurity> PasswordSecurity { get; set; }
+
         public CompanyDbContext(DbContextOptions<CompanyDbContext> options) :base(options)
         {
 

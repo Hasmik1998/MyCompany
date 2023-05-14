@@ -107,6 +107,9 @@
                                     <a asp-controller="Account" asp-action="UserRequestIndex" class="dropdown-item">
                                         <i class="material-icons">person_add</i>Users
                                     </a>
+                                        <a asp-controller="MLHelper" asp-action="PasswordSecurity" class="dropdown-item">
+                                            <i class="material-icons">account_circle</i>Password Security
+                                        </a>
                                 }
                                 else if (!User.Identity.IsAuthenticated)
                                 {
@@ -139,6 +142,7 @@
 
                             </div>
                         }
+                       
                     </li>
                     <li class="dropdown nav-item">
                         @if (User.Identity.IsAuthenticated)
@@ -151,7 +155,7 @@
                                     <i class="material-icons">list</i>Retings
                                 </a>
                                 <a asp-controller="MLHelper" asp-action="ChessGuid" class="dropdown-item">
-                                    <i class="material-icons">view_day</i> Chess Guid
+                                    <i class="material-icons">view_day</i> Chess Guide
                                 </a>
                                 <a asp-controller="MLHelper" asp-action="Tournament" class="dropdown-item">
                                     <i class="material-icons">dns</i> Tournament
